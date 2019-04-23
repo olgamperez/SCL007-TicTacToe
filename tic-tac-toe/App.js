@@ -1,0 +1,163 @@
+import React, { Component } from 'react';
+import { AppRegistry, Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { red } from 'ansi-colors';
+
+export default class App extends React.Component{
+
+  constructor(props){
+    super(props);
+
+    this.state= {
+      statusGame: [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+      ],
+      player: 1,
+    }
+  }
+
+  componentDidMount(){
+    this.startGame();
+  }
+  startGame = () => {
+    this.setState({statusGame:
+      [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+      ]
+    });
+  }
+
+  //la funcion winnerPlayer =>
+  //retorna 1 si el jugador 1 gana
+  //retorna -1 si el jugador 2 gana
+  //retorna cero si ninguno gana
+
+  winnerPlayer = ()=>{
+    const numTiles = 3;
+    let add;
+    //Para las filas
+    for(let i= 0; i<numTiles; i++){
+      add = this.state.statusGame[i][0]+this.state.statusGame[i][1]+this.state.statusGame[i][2];
+      if(add == 3) {return 1;}
+      else if(add == -3) {return -1;}
+    }
+    // Para las columnas
+    for(let i= 0; i<numTiles; i++){
+      add = this.state.statusGame[0][i]+this.state.statusGame[1][i]+this.state.statusGame[2][i];
+      if(add == 3) {return 1;}
+      else if(add == -3) {return -1;}
+    }
+    //Para las diagonales
+    add = this.state.statusGame[0][0]+this.state.statusGame[1][1]+this.state.statusGame[2][2];
+      if(add == 3) {return 1;}
+      else if(add == -3) {return -1;}
+      add = this.state.statusGame[2][0]+this.state.statusGame[1][1]+this.state.statusGame[0][2];
+      if(add == 3) {return 1;}
+      else if(add == -3) {return -1;}
+      //Sin ganadores
+      return 0;
+  }
+
+  onPressTile = (row, col) => {
+    //Bloquear tile para que no cambie la jugada
+    let notChangeTile = this.state.statusGame[row][col];
+    if(notChangeTile !== 0) {return;}
+    //guardar el jugador actual
+    let currentPlayer= this.state.player;
+    let player = this.state.player;
+    //Seleccionar el lugar correcto
+    let arr = this.state.statusGame.slice();
+    arr[row][col] = player;
+    this.setState({statusGame: arr});
+
+    // Cambiar de jugador
+    let newPlayer = (player == 1) ? -1 : 1; 
+    this.setState({player: newPlayer});
+      //Comprobando si existe ganador
+    let winners = this.winnerPlayer();
+    if(winners == 1) {
+      Alert.alert('El jugador O es el ganador');
+      this.startGame();
+    }
+    else if(winners == -1){
+      Alert.alert('El jugador X es el ganador');
+      this.startGame();
+    }
+  }
+
+returnIcon = (row, col) => {
+  //evaluar caso de las jugadas
+  let valueItem = this.state.statusGame[row] [col];
+  switch(valueItem){
+    case 1: return <Icon name='circle' style={styles.tileO}/>;
+    case -1: return <Icon name='times' style={styles.tileX}/>;
+    default: return <View/>;
+  }
+}
+
+  render(){
+    return (
+      //contruyendo la matriz
+      <View style={styles.container}>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity onPress={() => this.onPressTile(0,0)} style={styles.tile}>
+            {this.returnIcon(0,0)}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.onPressTile(0,1)} style={styles.tile}>
+            {this.returnIcon(0,1)}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.onPressTile(0,2)} style={styles.tile}>
+            {this.returnIcon(0,2)}
+          </TouchableOpacity>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity onPress={() => this.onPressTile(1,0)} style={styles.tile}>
+              {this.returnIcon(1,0)}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.onPressTile(1,1)} style={styles.tile}>
+            {this.returnIcon(1,1)}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.onPressTile(1,2)} style={styles.tile}>
+            {this.returnIcon(1,2)}
+          </TouchableOpacity>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity onPress={() => this.onPressTile(2,0)} style={styles.tile}>
+            {this.returnIcon(2,0)}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.onPressTile(2,1)} style={styles.tile}>
+            {this.returnIcon(2,1)}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.onPressTile(2,2)} style={styles.tile}>
+            {this.returnIcon(2,2)}
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tile:{
+    borderWidth: 3,
+    width: 100,
+    height: 100,
+  },
+  tileX:{
+    fontSize: 80,
+    color: 'red'
+  },
+  tileO:{
+    fontSize: 80,
+    color: 'grey'
+  }
+})
