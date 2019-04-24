@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { AppRegistry, Text, View, StyleSheet, TouchableOpacity, Alert, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { red } from 'ansi-colors';
 
@@ -88,7 +88,10 @@ export default class App extends React.Component{
       this.startGame();
     }
   }
-
+  //Funcion de boton para iniciar nueva partida
+  onNewGamePress = ()=> {
+    this.startGame();
+  }
 returnIcon = (row, col) => {
   //evaluar caso de las jugadas
   let valueItem = this.state.statusGame[row] [col];
@@ -104,37 +107,40 @@ returnIcon = (row, col) => {
       //contruyendo la matriz
       <View style={styles.container}>
         <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity onPress={() => this.onPressTile(0,0)} style={styles.tile}>
+          <TouchableOpacity onPress={() => this.onPressTile(0,0)} style={[styles.tile, {borderLeftWidth: 0, borderTopWidth: 0}]}>
             {this.returnIcon(0,0)}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.onPressTile(0,1)} style={styles.tile}>
+          <TouchableOpacity onPress={() => this.onPressTile(0,1)} style={[styles.tile, {borderTopWidth: 0}]}>
             {this.returnIcon(0,1)}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.onPressTile(0,2)} style={styles.tile}>
+          <TouchableOpacity onPress={() => this.onPressTile(0,2)} style={[styles.tile, {borderTopWidth: 0, borderRightWidth: 0}]}>
             {this.returnIcon(0,2)}
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity onPress={() => this.onPressTile(1,0)} style={styles.tile}>
+          <TouchableOpacity onPress={() => this.onPressTile(1,0)} style={[styles.tile, {borderLeftWidth: 0}]}>
               {this.returnIcon(1,0)}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.onPressTile(1,1)} style={styles.tile}>
             {this.returnIcon(1,1)}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.onPressTile(1,2)} style={styles.tile}>
+          <TouchableOpacity onPress={() => this.onPressTile(1,2)} style={[styles.tile, {borderRightWidth: 0}]}>
             {this.returnIcon(1,2)}
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity onPress={() => this.onPressTile(2,0)} style={styles.tile}>
+          <TouchableOpacity onPress={() => this.onPressTile(2,0)} style={[styles.tile, {borderLeftWidth: 0, borderBottomWidth: 0}]}>
             {this.returnIcon(2,0)}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.onPressTile(2,1)} style={styles.tile}>
+          <TouchableOpacity onPress={() => this.onPressTile(2,1)} style={[styles.tile, {borderBottomWidth: 0}]}>
             {this.returnIcon(2,1)}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.onPressTile(2,2)} style={styles.tile}>
+          <TouchableOpacity onPress={() => this.onPressTile(2,2)} style={[styles.tile, {borderBottomWidth: 0, borderRightWidth: 0}]}>
             {this.returnIcon(2,2)}
           </TouchableOpacity>
+        </View>
+        <View style={styles.button}>
+        <Button title='Nueva Partida' onPress={this.onNewGamePress}/>
         </View>
       </View>
     );
@@ -143,7 +149,7 @@ returnIcon = (row, col) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#212121',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -151,13 +157,19 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     width: 100,
     height: 100,
+    borderColor: '#fff'
   },
   tileX:{
-    fontSize: 80,
-    color: 'red'
+    fontSize: 70,
+    color: 'red',
+    alignItems: 'center'
   },
   tileO:{
-    fontSize: 80,
-    color: 'grey'
+    fontSize: 70,
+    color: '#008000',
+    alignItems: 'center',
+  },
+  button: {
+    paddingTop: 15
   }
 })
