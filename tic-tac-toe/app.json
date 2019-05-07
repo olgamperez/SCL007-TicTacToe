@@ -24,6 +24,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "Es un simple videojuego de 3 en raya  o tic tac toe para ser utilizados en celulares y tabletas. Se construyo en React Native; para instalar y ejecutar en dispositivos Android e iOS,  todo ello usando JavaScript y React.  El objetivo principal de aprendizaje es tener una primera experiencia en desarrollo de aplicaciones nativas con React Native.\n\n",
+    "githubUrl": "https://github.com/olgamperez/SCL007-TicTacToe"
   }
 }

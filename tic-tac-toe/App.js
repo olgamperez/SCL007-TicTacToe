@@ -46,24 +46,42 @@ export default class App extends React.Component{
     //Para las filas
     for(let i= 0; i<numTiles; i++){
       add = this.state.statusGame[i][0]+this.state.statusGame[i][1]+this.state.statusGame[i][2];
-      if(add == 3) {return 1;}
-      else if(add == -3) {return -1;}
+      if(add == 3) 
+      {return 1;}
+      else if(add == -3) 
+      {return -1;}
     }
     // Para las columnas
     for(let i= 0; i<numTiles; i++){
       add = this.state.statusGame[0][i]+this.state.statusGame[1][i]+this.state.statusGame[2][i];
-      if(add == 3) {return 1;}
-      else if(add == -3) {return -1;}
+      if(add == 3) 
+      {return 1;}
+      else if(add == -3) 
+      {return -1;}
     }
     //Para las diagonales
     add = this.state.statusGame[0][0]+this.state.statusGame[1][1]+this.state.statusGame[2][2];
-      if(add == 3) {return 1;}
-      else if(add == -3) {return -1;}
+      if(add == 3) 
+      {return 1;}
+      else if(add == -3) 
+      {return -1;}
       add = this.state.statusGame[2][0]+this.state.statusGame[1][1]+this.state.statusGame[0][2];
-      if(add == 3) {return 1;}
-      else if(add == -3) {return -1;}
-      //Sin ganadores
-      return 0;
+      if(add == 3) 
+      {return 1;}
+      else if(add == -3) 
+      {return -1;}
+      //Sin ganadores (empate)
+      let draw = 0;
+      for (let i = 0; i < numTiles; i++) { 
+        for (let j = 0; j < numTiles; j++) {
+          if (this.state.statusGame[i][j] === 0) {
+            draw++;
+          }
+        }
+      }
+      if (draw === 0) {
+        return 0
+      }
   }
 
   onPressTile = (row, col) => {
@@ -88,6 +106,10 @@ export default class App extends React.Component{
     }
     else if(winners == -1){
       Alert.alert('El jugador X es el ganador');
+      this.startGame();
+    }
+    else if(winners == 0){
+      Alert.alert('Empate!!! Intentalo de nuevo');
       this.startGame();
     }
   }
@@ -117,7 +139,7 @@ returnIcon = (row, col) => {
 
   render(){
     return (
-      //contruyendo la matriz
+      //contruyendo la matriz visual 
       <View style={styles.container}>
         <Text style={{ color: '#B03A2E', fontSize: 40 }}>TIC-TAC-TOE</Text>
         <Text style={{ color: 'white', fontSize: 15, paddingBottom: 10,}}>Próximo Jugador: {this.turnNext()}</Text>
