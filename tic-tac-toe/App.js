@@ -9,6 +9,7 @@ export default class App extends React.Component{
     super(props);
 
     this.state= {
+      //Se crea la matriz para iniciar el juego en cero
       statusGame: [
         [0, 0, 0],
         [0, 0, 0],
@@ -16,8 +17,11 @@ export default class App extends React.Component{
       ],
       player: 1,
     }
+    this.startGame = this.startGame.bind(this);
+    this.returnIcon = this.returnIcon.bind(this);
+    this.onPressTile = this.onPressTile.bind(this);
   }
-
+ //Esta atento a llamar la función para iniciar el juego
   componentDidMount(){
     this.startGame();
   }
@@ -67,9 +71,8 @@ export default class App extends React.Component{
     let notChangeTile = this.state.statusGame[row][col];
     if(notChangeTile !== 0) {return;}
     //guardar el jugador actual
-    let currentPlayer= this.state.player;
     let player = this.state.player;
-    //Seleccionar el lugar correcto
+    //Seleccionar jugador y el cuadrado correcto
     let arr = this.state.statusGame.slice();
     arr[row][col] = player;
     this.setState({statusGame: arr});
@@ -92,11 +95,21 @@ export default class App extends React.Component{
   onNewGamePress = ()=> {
     this.startGame();
   }
+  // Indicador del proximo turno
+  turnNext() {
+    if (this.state.player === 1) {
+      return 'O'
+    }
+    if (this.state.player === -1) {
+      return 'X'
+    }
+  }
+
 returnIcon = (row, col) => {
   //evaluar caso de las jugadas
   let valueItem = this.state.statusGame[row] [col];
   switch(valueItem){
-    case 1: return <Icon name='circle' style={styles.tileO}/>;
+    case 1: return <Icon name='circle-thin' style={styles.tileO}/>;
     case -1: return <Icon name='times' style={styles.tileX}/>;
     default: return <View/>;
   }
@@ -106,6 +119,8 @@ returnIcon = (row, col) => {
     return (
       //contruyendo la matriz
       <View style={styles.container}>
+        <Text style={{ color: '#B03A2E', fontSize: 40 }}>TIC-TAC-TOE</Text>
+        <Text style={{ color: 'white', fontSize: 15, paddingBottom: 10,}}>Próximo Jugador: {this.turnNext()}</Text>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={() => this.onPressTile(0,0)} style={[styles.tile, {borderLeftWidth: 0, borderTopWidth: 0}]}>
             {this.returnIcon(0,0)}
@@ -139,8 +154,8 @@ returnIcon = (row, col) => {
             {this.returnIcon(2,2)}
           </TouchableOpacity>
         </View>
-        <View style={styles.button}>
-        <Button title='Nueva Partida' onPress={this.onNewGamePress}/>
+        <View style={styles.buttonView}>
+        <Button title='Nueva Partida' onPress={this.onNewGamePress} />
         </View>
       </View>
     );
@@ -154,7 +169,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   tile:{
-    borderWidth: 3,
+    borderWidth: 2,
     width: 100,
     height: 100,
     borderColor: '#fff'
@@ -162,14 +177,16 @@ const styles = StyleSheet.create({
   tileX:{
     fontSize: 70,
     color: 'red',
-    alignItems: 'center'
+    textAlign: 'center',
+    paddingTop: 8,
   },
   tileO:{
     fontSize: 70,
     color: '#008000',
-    alignItems: 'center',
+    textAlign: 'center',
+    paddingTop: 10,
   },
-  button: {
-    paddingTop: 15
+  buttonView: {
+    paddingTop: 15, 
   }
 })
